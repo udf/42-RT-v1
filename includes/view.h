@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:47 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/29 21:51:06 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 09:49:49 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # include "libft.h"
 # include "lib3d.h"
 # include "SDL.h"
-//# include "util.h"
+# include "util.h"
 # include "model.h"
 
 typedef struct		s_ray

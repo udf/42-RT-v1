@@ -6,13 +6,11 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:37 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 09:30:59 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 09:53:42 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "controller.h"
-
-// TODO: mouse rotation
 
 static void	move_var(float *var, float amount,
 	size_t scan_code_plus, size_t scan_code_minus)
@@ -49,6 +47,30 @@ static void	process_k_input(float secs, t_view_data *v)
 	}
 }
 
+static void	process_m_input(t_view_data *v)
+{
+	static t_p2d	m_pos_old = {0.0f, 0.0f};
+	static Uint32	m_state_old;
+	Uint32			m_state_change;
+	t_ip2d			m_pos;
+	const Uint32	m_state = SDL_GetMouseState(&m_pos.x, &m_pos.y);
+
+	m_state_change = m_state_old ^ m_state;
+	m_state_old = m_state;
+	if (m_state & SDL_BUTTON(1) && m_state_change & SDL_BUTTON(1))
+		m_pos_old = (t_p2d){(float)m_pos.x, (float)m_pos.y};
+	if (m_state & SDL_BUTTON(1) || m_state_change & SDL_BUTTON(1))
+	{
+		v->m_rot.x = ((float)m_pos.y - m_pos_old.y) / (float)v->w * 360.0f;
+		v->m_rot.z = ((float)m_pos.x - m_pos_old.x) / (float)v->h * 360.0f;
+	}
+	if (!(m_state & SDL_BUTTON(1)) && m_state_change & SDL_BUTTON(1))
+	{
+		v->rot = p3d_add(v->rot, v->m_rot);
+		v->m_rot = (t_p3d){0, 0, 0};
+	}
+}
+
 int			controller_process_events(float elapsed_secs)
 {
 	SDL_Event	event;
@@ -67,5 +89,6 @@ int			controller_process_events(float elapsed_secs)
 		}
 	}
 	process_k_input(elapsed_secs, v);
+	process_m_input(v);
 	return (0);
 }

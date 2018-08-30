@@ -6,11 +6,11 @@
 #    By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/25 07:39:20 by mhoosen           #+#    #+#              #
-#    Updated: 2018/08/29 17:46:39 by mhoosen          ###   ########.fr        #
+#    Updated: 2018/08/30 09:50:44 by mhoosen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-HEADER_FILES=RTv1.h model.h view.h controller.h
+HEADER_FILES=RTv1.h util.h model.h view.h controller.h
 SRC_FILES=main.c \
 model.c \
 view.c view_render.c view_util.c \
