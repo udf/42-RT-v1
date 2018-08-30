@@ -6,19 +6,19 @@
 #    By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/25 07:39:20 by mhoosen           #+#    #+#              #
-#    Updated: 2018/08/30 11:28:40 by mhoosen          ###   ########.fr        #
+#    Updated: 2018/08/30 13:37:57 by mhoosen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 HEADER_FILES=RTv1.h util.h model.h view.h controller.h
 SRC_FILES=main.c \
-model.c model_scene.c\
+model.c model_util.c model_scene.c\
 view.c view_render.c view_util.c \
 controller.c
 HEADERS=$(HEADER_FILES:%=includes/%)
 SRCS=$(SRC_FILES:%=srcs/%)
 NAME=RTv1
-CFLAGS=-Wall -Wextra -Werror -Wconversion -g
+CFLAGS=-Wall -Wextra -Werror -g
 INCLUDES=-I libft/includes -I lib3d/includes -I ./includes
 LIBS=-L libft/ -L lib3d/ -lft -l3d -lm
 SDL2_CONFIG=SDL2/bin/sdl2-config

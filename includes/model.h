@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 11:03:47 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 13:21:39 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef enum		e_object
 typedef struct		s_sphere
 {
 	t_e_object		type;
+	t_pixel			colour;
 	t_p3d			pos;
 	float			radius;
 }					t_sphere;
@@ -86,4 +87,10 @@ void				model_free(void);
 */
 int					model_scene_load(const char *scene_path, t_model_data *m);
 int					model_obj_sphere_load(char *line, t_object *object);
+
+/*
+** Utility
+*/
+int					parse_RGB(char *str, t_pixel *colour);
+
 #endif

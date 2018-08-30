@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 11:29:22 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 13:47:23 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,8 @@
 int		model_obj_sphere_load(char *line, t_object *object)
 {
 	object->type = SPHERE;
+	if (!ft_tokenseek_next(&line) || parse_RGB(line, &object->sphere.colour))
+		return (1);
 	if (!ft_tokenseek_next(&line))
 		return (1);
 	object->sphere.pos.x = (float)ft_atof(line);
@@ -43,10 +45,9 @@ int		model_scene_load(const char *scene_path, t_model_data *m)
 	line_n = 0;
 	while (get_next_line(fd, (char **)&line) == GNL_SUCCESS)
 	{
+		err = 1;
 		if (m->obj_loaders[line[0]])
 			err = (m->obj_loaders[line[0]])((char*)line, &obj);
-		else
-			err = 1;
 		free(line);
 		if (err)
 			return (SDL_SetError("Failed to read object on line %zd", line_n));
