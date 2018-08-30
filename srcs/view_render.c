@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/29 22:14:48 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 15:18:21 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,62 +20,6 @@ void	mat_set_modelview(t_mat ret, float distance, t_p3d pivot, t_p3d rot)
 	mat_rotate_y(ret, -rot.y);
 	mat_rotate_x(ret, -rot.x);
 	mat_translate(ret, 0.0f, 0.0f, -distance);
-}
-
-t_p2d	t_p2d_lerp(float frac, t_p2d start, t_p2d end)
-{
-	return (t_p2d){start.x + (end.x - start.x) * frac,
-		start.y + (end.y - start.y) * frac};
-}
-
-t_p2d	p2d_roundf(t_p2d p)
-{
-	return (t_p2d){roundf(p.x), roundf(p.y)};
-}
-
-static void	point_clip(t_p2d *p, float w, float h, t_p2d m)
-{
-	t_p2d	clamped;
-
-	clamped.x = CLAMP(p->x, 0, w - 1.0f);
-	if (isfinite(m.y))
-		p->y = m.y * (clamped.x - p->x) + p->y;
-	p->x = clamped.x;
-	clamped.y = CLAMP(p->y, 0, h - 1.0f);
-	if (isfinite(m.x))
-		p->x = m.x * (clamped.y - p->y) + p->x;
-	p->y = clamped.y;
-}
-
-int			line_clip(t_p2d *a, t_p2d *b, float w, float h)
-{
-	const t_p2d m = {(b->x - a->x) / (b->y - a->y),
-
-	(b->y - a->y) / (b->x - a->x)};
-	point_clip(a, w, h, m);
-	point_clip(b, w, h, m);
-	return ((a->x < 0 || a->x >= w || a->y < 0 || a->y >= h)
-				&& (b->x < 0 || b->x >= w || b->y < 0 || b->y >= h));
-}
-
-void	put_line(t_view_data *v, t_p2d a, t_p2d b, Uint32 colour)
-{
-	long	i;
-	long	steps;
-	t_p2d	p;
-
-	if (line_clip(&a, &b, (float)v->w, (float)v->h))
-		return ;
-	a = (t_p2d){roundf(a.x), roundf(a.y)};
-	b = (t_p2d){roundf(b.x), roundf(b.y)};
-	steps = (long)MAX(ABS(b.x - a.x), ABS(b.y - a.y));
-	i = 0;
-	while (i < steps)
-	{
-		p = p2d_roundf(t_p2d_lerp((float)i / (float)steps, a, b));
-		*buf_pixel(&v->buf, (int)roundf(p.x), (int)roundf(p.y)) = colour;
-		i++;
-	}
 }
 
 void		view_render_bk(t_view_data *v)
@@ -96,55 +40,47 @@ void		view_render_bk(t_view_data *v)
 	}
 }
 
-t_p2d		p3d_truncz(t_p3d p)
+// TODO: maybe need view here
+Uint32		cast_ray(t_ray ray, const t_vec *objects)
 {
-	return (t_p2d){p.x, p.y};
-}
+	t_pixel ret;
 
-void		aaa(t_view_data *v)
-{
-	t_mat		world_to_cam;
-	const t_p2d	raster_size = {(float)v->w, (float)v->h};
-	t_p3d		verts[8] =
-	{
-		{-1, -1, -1},
-		{ 1, -1, -1},
-		{-1,  1, -1},
-		{ 1,  1, -1},
-		{-1, -1, 1},
-		{ 1, -1, 1},
-		{-1,  1, 1},
-		{ 1,  1, 1}
-	};
-
-	mat_set_modelview(world_to_cam, v->distance, v->pivot,
-		p3d_add(v->rot, v->m_rot));
-	for (int i = 0; i < 8; ++i)
-	{
-		verts[i] = p3d_project(v->distance, raster_size, verts[i], world_to_cam);
-	}
-
-	put_line(v, p3d_truncz(verts[0]), p3d_truncz(verts[1]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[1]), p3d_truncz(verts[3]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[3]), p3d_truncz(verts[2]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[2]), p3d_truncz(verts[0]), 0x00FF0000);
-
-	put_line(v, p3d_truncz(verts[4]), p3d_truncz(verts[5]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[5]), p3d_truncz(verts[7]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[7]), p3d_truncz(verts[6]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[6]), p3d_truncz(verts[4]), 0x00FF0000);
-
-	put_line(v, p3d_truncz(verts[0]), p3d_truncz(verts[4]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[1]), p3d_truncz(verts[5]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[2]), p3d_truncz(verts[6]), 0x00FF0000);
-	put_line(v, p3d_truncz(verts[3]), p3d_truncz(verts[7]), 0x00FF0000);
+	(void)objects; // TODO: intersection stuff
+	ret.a = 0xFF;
+	ret.r = (Uint8)((ray.dir.x + 1) / 0.5f * 255.0f);
+	ret.g = (Uint8)((ray.dir.y + 1) / 0.5f * 255.0f);
+	ret.b = (Uint8)((ray.dir.z + 1) / 0.5f * 255.0f);
+	return *((Uint32 *)&ret);
 }
 
 void		view_render(t_view_data *v, const t_model_data *m)
 {
-	(void)m; // TODO: use m.objects to render
+	t_ip2d	iter;
+	t_ray	ray;
+	t_mat	world_to_cam;
+	t_mat	cam_to_world;
+	const float scale = tan_deg(v->fov * 0.5);
+	const float image_aspect_ratio = v->w / (float)v->h;
 
+	mat_set_modelview(world_to_cam, v->distance, v->pivot,
+		p3d_add(v->rot, v->m_rot)); // TODO check if can modify to give same as inverse
+	mat_inverse(cam_to_world, world_to_cam);
 	view_render_bk(v);
-
-	aaa(v);
+	ray.orig = mat_vec_mult((t_p3d){0, 0, 0}, cam_to_world);
+	printf("ray origin is: %f,%f,%f\n", ray.orig.x, ray.orig.y, ray.orig.z);
+	iter.x = -1;
+	while (++iter.x < v->w)
+	{
+		iter.y = -1;
+		while (++iter.y < v->h)
+		{
+			ray.dir.x = (2 * (iter.x + 0.5) / (float)v->w - 1) * image_aspect_ratio * scale;
+			ray.dir.y = (1 - 2 * (iter.y + 0.5) / (float)v->h) * scale;
+			ray.dir.z = -1;
+			ray.dir = p3d_transform(ray.dir, cam_to_world);
+			ray.dir = p3d_norm(ray.dir);
+			*buf_pixel(&v->buf, iter.x, iter.y) = cast_ray(ray, &m->objects);
+		}
+	}
+	//exit(0);
 }

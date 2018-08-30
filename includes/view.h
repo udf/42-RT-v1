@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:47 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 09:49:49 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 14:46:58 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 
 typedef struct		s_ray
 {
-	t_p3d			start;
+	t_p3d			orig;
 	t_p3d			dir;
 }					t_ray;
 
