@@ -1,0 +1,6 @@
+[submodule "lib3d"]
+	path = lib3d
+	url = https://github.com/udf/42-lib3d.git
+[submodule "libft"]
+	path = libft
+	url = https://github.com/udf/42-libft.git
