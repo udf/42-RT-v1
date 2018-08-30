@@ -6,22 +6,21 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 15:18:21 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 15:34:26 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "view.h"
 
-void	mat_set_modelview(t_mat ret, float distance, t_p3d pivot, t_p3d rot)
+void	cam_to_w_modelview(t_mat ret, float distance, t_p3d pivot, t_p3d rot)
 {
 	mat_set_identity(ret);
-	mat_translate(ret, -pivot.x, -pivot.y, -pivot.z);
-	mat_rotate_z(ret, -rot.z);
-	mat_rotate_y(ret, -rot.y);
-	mat_rotate_x(ret, -rot.x);
-	mat_translate(ret, 0.0f, 0.0f, -distance);
+	mat_translate(ret, 0.0f, 0.0f, distance);
+	mat_rotate_x(ret, rot.x);
+	mat_rotate_y(ret, rot.y);
+	mat_rotate_z(ret, rot.z);
+	mat_translate(ret, pivot.x, pivot.y, pivot.z);
 }
-
 void		view_render_bk(t_view_data *v)
 {
 	int x;
@@ -57,14 +56,12 @@ void		view_render(t_view_data *v, const t_model_data *m)
 {
 	t_ip2d	iter;
 	t_ray	ray;
-	t_mat	world_to_cam;
 	t_mat	cam_to_world;
 	const float scale = tan_deg(v->fov * 0.5);
 	const float image_aspect_ratio = v->w / (float)v->h;
 
-	mat_set_modelview(world_to_cam, v->distance, v->pivot,
-		p3d_add(v->rot, v->m_rot)); // TODO check if can modify to give same as inverse
-	mat_inverse(cam_to_world, world_to_cam);
+	cam_to_w_modelview(cam_to_world, v->distance, v->pivot,
+		p3d_add(v->rot, v->m_rot));
 	view_render_bk(v);
 	ray.orig = mat_vec_mult((t_p3d){0, 0, 0}, cam_to_world);
 	printf("ray origin is: %f,%f,%f\n", ray.orig.x, ray.orig.y, ray.orig.z);
@@ -82,5 +79,4 @@ void		view_render(t_view_data *v, const t_model_data *m)
 			*buf_pixel(&v->buf, iter.x, iter.y) = cast_ray(ray, &m->objects);
 		}
 	}
-	//exit(0);
 }
