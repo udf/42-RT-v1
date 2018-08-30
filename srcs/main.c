@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:27 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/29 17:23:18 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 09:55:38 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,11 +43,13 @@ static void	loop(void)
 	}
 }
 
-int			main(void)
+int			main(int ac, char **av)
 {
+	if (ac <= 1)
+		die(1, "No scene file provided");
 	if (SDL_Init(SDL_INIT_VIDEO) < 0)
 		die(2, "Failed to initialize SDL: ");
-	if (model_init())
+	if (model_init(av[1]))
 		die(3, NULL);
 	if (view_init(800, 600, 90.0f))
 		die(4, NULL);
