@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:27 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 09:55:38 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 20:22:01 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,17 +26,9 @@ static void	die(int code, char *pre_msg)
 
 static void	loop(void)
 {
-	Uint32		last_ticks;
-	ssize_t		elapsed_ticks;
-	float		elapsed_secs;
-
-	last_ticks = SDL_GetTicks();
 	while (1)
 	{
-		elapsed_ticks = SDL_GetTicks() - last_ticks;
-		last_ticks = SDL_GetTicks();
-		elapsed_secs = (float)elapsed_ticks / 1000.0f;
-		if (controller_process_events(elapsed_secs))
+		if (controller_process_events(0.3f))
 			break ;
 		//model_update(elapsed_ticks, elapsed_secs);
 		view_update();

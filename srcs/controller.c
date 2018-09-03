@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:37 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 09:53:42 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 20:23:54 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,7 @@ int			controller_process_events(float elapsed_secs)
 		if (event.type == SDL_MOUSEWHEEL)
 		{
 			v->distance = MAX(1.0f,
-				v->distance - (float)event.wheel.y * elapsed_secs * 5.0f);
+				v->distance - (float)event.wheel.y);
 		}
 	}
 	process_k_input(elapsed_secs, v);
