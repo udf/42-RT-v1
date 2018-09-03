@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 19:56:21 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 20:18:01 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,40 +72,31 @@ int			test_intersection(t_ray ray, const t_vec *objects,
 	return (hit_obj != NULL);
 }
 
-Uint32		cast_ray(t_ray ray, const t_vec *objects)
+Uint32		cast_ray(t_ray ray, const t_vec *objects, t_ray sh_ray, size_t i)
 {
 	t_p3d		out_colour;
 	float		t;
 	t_object	*hit_obj;
-	t_p3d		phit;
-	t_p3d		nhit;
-	size_t		i;
+	t_ray		hit;
 	t_object	*l_obj;
-	t_ray		sh_ray;
 
-	hit_obj = NULL;
-	out_colour = (t_p3d){0, 0, 0};
-	if (test_intersection(ray, objects, &t, &hit_obj))
+	if (!test_intersection(ray, objects, &t, &hit_obj))
+		return (p3d_to_colour((t_p3d){0, 0, 0}));
+	i = 0;
+	out_colour = hit_obj->g.colour;
+	hit.orig = p3d_add(ray.orig, p3d_mult(ray.dir, t));
+	hit.dir = hit_obj->g.normal_at(hit_obj, hit.orig);
+	sh_ray.orig = p3d_add(hit.orig, p3d_mult(hit.dir, 0.0001));
+	while (i < objects->length)
 	{
-		i = 0;
-		out_colour = hit_obj->g.colour;
-		phit = p3d_add(ray.orig, p3d_mult(ray.dir, t));
-		nhit = hit_obj->g.normal_at(hit_obj, phit);
-		sh_ray.orig = p3d_add(phit, p3d_mult(nhit, 0.0001));
-		while (i < objects->length)
-		{
-			l_obj = vec_get((t_vec *)objects, i);
-			if (l_obj->g.type == LIGHT)
-			{
-				sh_ray.dir = p3d_norm(p3d_sub(l_obj->light.pos, phit));
-				if (!test_intersection(sh_ray, objects, NULL, NULL))
-				{
-					out_colour = p3d_add(out_colour, p3d_mult(l_obj->g.colour,
-						MAX(0.0f, p3d_dot(nhit, sh_ray.dir))));
-				}
-			}
-			i++;
-		}
+		l_obj = vec_get((t_vec *)objects, i++);
+		if (l_obj->g.type != LIGHT)
+			continue ;
+		sh_ray.dir = p3d_norm(p3d_sub(l_obj->light.pos, hit.orig));
+		if (test_intersection(sh_ray, objects, NULL, NULL))
+			continue ;
+		out_colour = p3d_add(out_colour, p3d_mult(l_obj->g.colour,
+			MAX(0.0f, p3d_dot(hit.dir, sh_ray.dir))));
 	}
 	return (p3d_to_colour(out_colour));
 }
@@ -133,7 +124,8 @@ void		view_render(t_view_data *v, const t_model_data *m)
 						* scale * 1 / image_aspect_ratio;
 			ray.dir.z = -1;
 			ray.dir = p3d_norm(mat_dir_mult(ray.dir, cam_to_world));
-			*buf_pixel(&v->buf, iter.x, iter.y) = cast_ray(ray, &m->objects);
+			*buf_pixel(&v->buf, iter.x, iter.y) =
+				cast_ray(ray, &m->objects, ray, 0);
 		}
 	}
 }
