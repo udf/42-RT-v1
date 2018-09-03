@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 20:36:03 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 20:37:51 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,7 @@ int		model_obj_light_load(char *line, t_object *object)
 	object->light.pos.z = (float)ft_atof(line);
 	if (!ft_tokenseek_next(&line))
 		return (1);
-	tmp = (float)ft_atof(line)
-	if (tmp <= 0)
+	if ((tmp = (float)ft_atof(line)) <= 0)
 		return (1);
 	object->g.colour = p3d_mult(object->g.colour, tmp);
 	return (0);
