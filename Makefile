@@ -6,13 +6,13 @@
 #    By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/25 07:39:20 by mhoosen           #+#    #+#              #
-#    Updated: 2018/08/30 13:37:57 by mhoosen          ###   ########.fr        #
+#    Updated: 2018/08/30 21:48:11 by mhoosen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 HEADER_FILES=RTv1.h util.h model.h view.h controller.h
 SRC_FILES=main.c \
-model.c model_util.c model_scene.c\
+model.c model_util.c model_intersect.c model_scene.c\
 view.c view_render.c view_util.c \
 controller.c
 HEADERS=$(HEADER_FILES:%=includes/%)

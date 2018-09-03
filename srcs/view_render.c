@@ -6,13 +6,13 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 15:34:26 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 13:30:31 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "view.h"
 
-void	cam_to_w_modelview(t_mat ret, float distance, t_p3d pivot, t_p3d rot)
+void   cam_to_w_modelview(t_mat ret, float distance, t_p3d pivot, t_p3d rot)
 {
 	mat_set_identity(ret);
 	mat_translate(ret, 0.0f, 0.0f, distance);
@@ -21,6 +21,7 @@ void	cam_to_w_modelview(t_mat ret, float distance, t_p3d pivot, t_p3d rot)
 	mat_rotate_z(ret, rot.z);
 	mat_translate(ret, pivot.x, pivot.y, pivot.z);
 }
+
 void		view_render_bk(t_view_data *v)
 {
 	int x;
@@ -39,16 +40,42 @@ void		view_render_bk(t_view_data *v)
 	}
 }
 
-// TODO: maybe need view here
+int			test_intersection(t_ray ray, const t_vec *objects,
+	float *t_near, t_object **hit_obj)
+{
+	size_t		i;
+	t_object	*object;
+	float		t;
+
+	*t_near = INFINITY;
+	i = 0;
+	while (i < objects->length)
+	{
+		object = vec_get((t_vec *)objects, i);
+		t = INFINITY;
+		if (object->g.intersect(object, ray, &t) && t < *t_near)
+		{
+			*hit_obj = object;
+			*t_near = t;
+		}
+		i++;
+	}
+	return (*hit_obj != NULL);
+}
+
 Uint32		cast_ray(t_ray ray, const t_vec *objects)
 {
-	t_pixel ret;
+	t_pixel		ret;
+	float		t;
+	t_object	*hit_obj;
 
-	(void)objects; // TODO: intersection stuff
-	ret.a = 0xFF;
-	ret.r = (Uint8)((ray.dir.x + 1) / 0.5f * 255.0f);
-	ret.g = (Uint8)((ray.dir.y + 1) / 0.5f * 255.0f);
-	ret.b = (Uint8)((ray.dir.z + 1) / 0.5f * 255.0f);
+	hit_obj = NULL;
+	ret = (t_pixel){255, 0, 0, 0};
+	if (test_intersection(ray, objects, &t, &hit_obj))
+	{
+		//TODO:shading
+		ret = hit_obj->g.colour;
+	}
 	return *((Uint32 *)&ret);
 }
 
@@ -64,18 +91,22 @@ void		view_render(t_view_data *v, const t_model_data *m)
 		p3d_add(v->rot, v->m_rot));
 	view_render_bk(v);
 	ray.orig = mat_vec_mult((t_p3d){0, 0, 0}, cam_to_world);
-	printf("ray origin is: %f,%f,%f\n", ray.orig.x, ray.orig.y, ray.orig.z);
-	iter.x = -1;
-	while (++iter.x < v->w)
+	iter.y = -1;
+	while (++iter.y < v->h)
 	{
-		iter.y = -1;
-		while (++iter.y < v->h)
+		iter.x = -1;
+		while (++iter.x < v->w)
 		{
-			ray.dir.x = (2 * (iter.x + 0.5) / (float)v->w - 1) * image_aspect_ratio * scale;
-			ray.dir.y = (1 - 2 * (iter.y + 0.5) / (float)v->h) * scale;
+			ray.dir.x = (2 * (iter.x + 0.5) / (float)v->w - 1) * scale;
+			ray.dir.y = (1 - 2 * (iter.y + 0.5) / (float)v->h) * scale * 1 / image_aspect_ratio;
 			ray.dir.z = -1;
-			ray.dir = p3d_transform(ray.dir, cam_to_world);
+			ray.dir = mat_dir_mult(ray.dir, cam_to_world);
 			ray.dir = p3d_norm(ray.dir);
+			if (iter.x == 399 && iter.y == 299)
+				printf("%d,%d: %.2f,%.2f,%.2f   %.2f,%.2f,%.2f\n",
+					iter.x, iter.y,
+					ray.orig.x, ray.orig.y, ray.orig.z,
+					ray.dir.x, ray.dir.y, ray.dir.z);
 			*buf_pixel(&v->buf, iter.x, iter.y) = cast_ray(ray, &m->objects);
 		}
 	}

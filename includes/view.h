@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:47 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 14:46:58 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/30 20:56:48 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,6 @@
 # include "SDL.h"
 # include "util.h"
 # include "model.h"
-
-typedef struct		s_ray
-{
-	t_p3d			orig;
-	t_p3d			dir;
-}					t_ray;
 
 typedef struct		s_buf
 {

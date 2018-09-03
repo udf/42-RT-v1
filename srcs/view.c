@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:34 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/29 22:07:50 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/08/31 00:05:18 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ int					view_init(int w, int h, float fov)
 		return (1);
 	v->distance = 5.0f;
 	v->pivot = (t_p3d){0, 0, 0};
-	v->rot.x = -45.0f;
 	return (0);
 }
 
