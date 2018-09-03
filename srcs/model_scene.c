@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 19:40:52 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 20:36:03 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,8 @@ int		model_obj_sphere_load(char *line, t_object *object)
 
 int		model_obj_light_load(char *line, t_object *object)
 {
+	float tmp;
+
 	object->g.type = LIGHT;
 	object->g.intersect = (t_inter_test)intersect_light;
 	if (!ft_tokenseek_next(&line) || parse_RGB(line, &object->g.colour))
@@ -49,6 +51,12 @@ int		model_obj_light_load(char *line, t_object *object)
 	if (!ft_tokenseek_next(&line))
 		return (1);
 	object->light.pos.z = (float)ft_atof(line);
+	if (!ft_tokenseek_next(&line))
+		return (1);
+	tmp = (float)ft_atof(line)
+	if (tmp <= 0)
+		return (1);
+	object->g.colour = p3d_mult(object->g.colour, tmp);
 	return (0);
 }
 
