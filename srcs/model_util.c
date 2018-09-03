@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 12:34:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 13:43:01 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 19:28:55 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,16 +36,21 @@ static int	parse_hex_byte(char *str, Uint8 *out)
 	return (0);
 }
 
-int			parse_RGB(char *str, t_pixel *colour)
+int			parse_RGB(char *str, t_p3d *v_colour)
 {
-	*colour = (t_pixel){0xFF, 0, 0, 0};
-	if (parse_hex_byte(str, &colour->r))
+	t_pixel colour;
+
+	colour = (t_pixel){0xFF, 0, 0, 0};
+	if (parse_hex_byte(str, &colour.r))
 		return (1);
 	str += 2;
-	if (parse_hex_byte(str, &colour->g))
+	if (parse_hex_byte(str, &colour.g))
 		return (1);
 	str += 2;
-	if (parse_hex_byte(str, &colour->b))
+	if (parse_hex_byte(str, &colour.b))
 		return (1);
+	v_colour->x = (float)colour.r / 255.0f;
+	v_colour->y = (float)colour.g / 255.0f;
+	v_colour->z = (float)colour.b / 255.0f;
 	return (0);
 }

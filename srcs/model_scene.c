@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 21:53:02 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 19:40:52 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int		model_obj_sphere_load(char *line, t_object *object)
 {
 	object->g.type = SPHERE;
 	object->g.intersect = (t_inter_test)intersect_sphere;
+	object->g.normal_at = (t_normal_at)normal_at_sphere;
 	if (!ft_tokenseek_next(&line) || parse_RGB(line, &object->g.colour))
 		return (1);
 	if (!ft_tokenseek_next(&line))
@@ -30,6 +31,24 @@ int		model_obj_sphere_load(char *line, t_object *object)
 	if (!ft_tokenseek_next(&line))
 		return (1);
 	object->sphere.radius = (float)ft_atof(line);
+	return (0);
+}
+
+int		model_obj_light_load(char *line, t_object *object)
+{
+	object->g.type = LIGHT;
+	object->g.intersect = (t_inter_test)intersect_light;
+	if (!ft_tokenseek_next(&line) || parse_RGB(line, &object->g.colour))
+		return (1);
+	if (!ft_tokenseek_next(&line))
+		return (1);
+	object->light.pos.x = (float)ft_atof(line);
+	if (!ft_tokenseek_next(&line))
+		return (1);
+	object->light.pos.y = (float)ft_atof(line);
+	if (!ft_tokenseek_next(&line))
+		return (1);
+	object->light.pos.z = (float)ft_atof(line);
 	return (0);
 }
 

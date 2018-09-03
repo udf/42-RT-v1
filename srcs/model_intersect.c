@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 20:59:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/02 23:56:59 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 18:18:43 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,13 @@ int		intersect_sphere(t_sphere *o, t_ray ray, float *t)
 	if (*t < 0)
 		*t = MAX(-thc, thc) + tca;
 	return *t >= 0;
+}
+
+int		intersect_light(t_light *o, t_ray ray, float *t)
+{
+	(void)o;
+	(void)ray;
+	(void)t;
+
+	return (0);
 }

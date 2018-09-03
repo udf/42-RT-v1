@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:47 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 20:56:48 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 19:56:44 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ void				view_render(t_view_data *v, const t_model_data *m);
 */
 int					iroundf(float v);
 Uint32				*buf_pixel(t_buf *buf, int x, int y);
+Uint32				p3d_to_colour(t_p3d p);
 
 #endif

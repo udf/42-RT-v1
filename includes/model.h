@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/30 21:52:24 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/03 19:41:34 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,26 +26,28 @@
 */
 union				u_object;
 typedef int			(*t_inter_test)(union u_object *o, t_ray ray, float *t);
+typedef t_p3d		(*t_normal_at)(union u_object *o, t_p3d p);
 
 typedef enum		e_object
 {
 	SPHERE,
 	CONE,
 	CYLINDER,
-	PLANE
+	PLANE,
+	LIGHT
 }					t_e_object;
 
 typedef struct		s_generic
 {
 	t_e_object		type;
-	t_pixel			colour;
+	t_p3d			colour;
 	t_inter_test	intersect;
+	t_normal_at		normal_at;
 }					t_generic;
 
 typedef struct		s_sphere
 {
 	t_generic		g;
-	t_pixel			colour;
 	t_p3d			pos;
 	float			radius;
 }					t_sphere;
@@ -68,6 +70,12 @@ typedef struct		s_plane
 	// TODO: actual props
 }					t_plane;
 
+typedef struct		s_light
+{
+	t_generic		g;
+	t_p3d			pos;
+}					t_light;
+
 typedef union		u_object
 {
 	t_generic		g;
@@ -75,6 +83,7 @@ typedef union		u_object
 	t_cone			cone;
 	t_cylinder		cylinder;
 	t_plane			plane;
+	t_light			light;
 }					t_object;
 
 typedef int			(*t_objloader)(char *line, t_object *object);
@@ -93,16 +102,21 @@ int					model_init(const char *scene_path);
 void				model_free(void);
 
 int					intersect_sphere(t_sphere *o, t_ray ray, float *t);
+int					intersect_light(t_light *o, t_ray ray, float *t);
+
+t_p3d				normal_at_sphere(t_sphere *o, t_p3d p);
 
 /*
 ** Private
 */
 int					model_scene_load(const char *scene_path, t_model_data *m);
 int					model_obj_sphere_load(char *line, t_object *object);
+int					model_obj_light_load(char *line, t_object *object);
 
 /*
 ** Utility
 */
-int					parse_RGB(char *str, t_pixel *colour);
+int					parse_RGB(char *str, t_p3d *v_colour);
+
 
 #endif
