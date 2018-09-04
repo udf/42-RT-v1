@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:37 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 09:19:35 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 13:05:41 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ static void	process_k_input(float secs, t_view_data *v)
 	}
 	if (kb_state[SDL_SCANCODE_W] || kb_state[SDL_SCANCODE_S])
 	{
-		move_var(&v->pivot.x, move_mult * secs * sin_deg(v->rot.z),
+		move_var(&v->pivot.x, move_mult * secs * -sin_deg(v->rot.z),
 			SDL_SCANCODE_W, SDL_SCANCODE_S);
-		move_var(&v->pivot.y, move_mult * secs * cos_deg(v->rot.z),
+		move_var(&v->pivot.y, move_mult * secs * -cos_deg(v->rot.z),
 			SDL_SCANCODE_S, SDL_SCANCODE_W);
 	}
 }
@@ -61,8 +61,8 @@ static void	process_m_input(t_view_data *v)
 		m_pos_old = (t_p2d){(float)m_pos.x, (float)m_pos.y};
 	if (m_state & SDL_BUTTON(1) || m_state_change & SDL_BUTTON(1))
 	{
-		v->m_rot.x = ((float)m_pos.y - m_pos_old.y) / (float)v->w * 360.0f;
-		v->m_rot.z = ((float)m_pos.x - m_pos_old.x) / (float)v->h * 360.0f;
+		v->m_rot.x = ((float)m_pos.y - m_pos_old.y) / (float)v->w * -360.0f;
+		v->m_rot.z = ((float)m_pos.x - m_pos_old.x) / (float)v->h * -360.0f;
 	}
 	if (!(m_state & SDL_BUTTON(1)) && m_state_change & SDL_BUTTON(1))
 	{
@@ -85,7 +85,7 @@ int			controller_process_events(float elapsed_secs)
 		if (event.type == SDL_MOUSEWHEEL)
 		{
 			v->distance = MAX(1.0f,
-				v->distance - (float)event.wheel.y);
+				v->distance - (float)event.wheel.y * 0.3f);
 		}
 	}
 	process_k_input(elapsed_secs, v);
