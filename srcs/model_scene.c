@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 20:37:51 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 10:06:04 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int		model_obj_sphere_load(char *line, t_object *object)
 	object->g.type = SPHERE;
 	object->g.intersect = (t_inter_test)intersect_sphere;
 	object->g.normal_at = (t_normal_at)normal_at_sphere;
-	if (!ft_tokenseek_next(&line) || parse_RGB(line, &object->g.colour))
+	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
 		return (1);
 	if (!ft_tokenseek_next(&line))
 		return (1);
@@ -40,7 +40,7 @@ int		model_obj_light_load(char *line, t_object *object)
 
 	object->g.type = LIGHT;
 	object->g.intersect = (t_inter_test)intersect_light;
-	if (!ft_tokenseek_next(&line) || parse_RGB(line, &object->g.colour))
+	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
 		return (1);
 	if (!ft_tokenseek_next(&line))
 		return (1);

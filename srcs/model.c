@@ -6,25 +6,25 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:30 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 18:13:54 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 10:05:14 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "model.h"
 
-t_model_data	*model_get_real(void)
+t_model_data		*model_get_real(void)
 {
 	static t_model_data model_data;
 
 	return (&model_data);
 }
 
-const t_model_data		*model_get(void)
+const t_model_data	*model_get(void)
 {
 	return (model_get_real());
 }
 
-int				model_init(const char *scene_path)
+int					model_init(const char *scene_path)
 {
 	t_model_data	*m;
 
@@ -35,7 +35,7 @@ int				model_init(const char *scene_path)
 	return (model_scene_load(scene_path, m));
 }
 
-void			model_free(void)
+void				model_free(void)
 {
 	t_model_data	*m;
 

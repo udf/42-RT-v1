@@ -6,11 +6,11 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:27 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 20:22:01 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 10:11:51 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "RTv1.h"
+#include "rt_v1.h"
 
 static void	die(int code, char *pre_msg)
 {

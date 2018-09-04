@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 19:41:34 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 10:07:08 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 /*
 ** Objects
 */
-union				u_object;
+union u_object;
 typedef int			(*t_inter_test)(union u_object *o, t_ray ray, float *t);
 typedef t_p3d		(*t_normal_at)(union u_object *o, t_p3d p);
 
@@ -116,7 +116,6 @@ int					model_obj_light_load(char *line, t_object *object);
 /*
 ** Utility
 */
-int					parse_RGB(char *str, t_p3d *v_colour);
-
+int					parse_rgb(char *str, t_p3d *v_colour);
 
 #endif

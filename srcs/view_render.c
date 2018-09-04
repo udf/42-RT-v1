@@ -6,18 +6,16 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 20:18:01 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 10:01:26 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "view.h"
 
-#define VEC_FOR(vec, ctr) for (size_t ctr = 0; ctr < vec->length; ++ctr)
-
-void   cam_to_w_modelview(t_mat ret, float distance, t_p3d pivot, t_p3d rot)
+void		cam_to_w_modelview(t_mat ret, float dist, t_p3d pivot, t_p3d rot)
 {
 	mat_set_identity(ret);
-	mat_translate(ret, 0.0f, 0.0f, distance);
+	mat_translate(ret, 0.0f, 0.0f, dist);
 	mat_rotate_x(ret, rot.x);
 	mat_rotate_y(ret, rot.y);
 	mat_rotate_z(ret, rot.z);
@@ -103,11 +101,11 @@ Uint32		cast_ray(t_ray ray, const t_vec *objects, t_ray sh_ray, size_t i)
 
 void		view_render(t_view_data *v, const t_model_data *m)
 {
-	t_ip2d	iter;
-	t_ray	ray;
-	t_mat	cam_to_world;
-	const float scale = tan_deg(v->fov * 0.5);
-	const float image_aspect_ratio = v->w / (float)v->h;
+	t_ip2d		iter;
+	t_ray		ray;
+	t_mat		cam_to_world;
+	const float	scale = tan_deg(v->fov * 0.5);
+	const float	image_aspect_ratio = v->w / (float)v->h;
 
 	cam_to_w_modelview(cam_to_world, v->distance, v->pivot,
 		p3d_add(v->rot, v->m_rot));

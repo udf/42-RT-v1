@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 12:34:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 19:28:55 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 10:06:03 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ static int	parse_hex_byte(char *str, Uint8 *out)
 	return (0);
 }
 
-int			parse_RGB(char *str, t_p3d *v_colour)
+int			parse_rgb(char *str, t_p3d *v_colour)
 {
 	t_pixel colour;
 
