@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:46:18 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 13:31:24 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 21:40:49 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ Uint32		p3d_to_colour(t_p3d p)
 {
 	t_pixel pix;
 
+	p = p3d_clip(p, 0.0f, 1.0f);
 	pix.a = 255;
-	pix.r = (Uint8)(CLAMP(p.x, 0.0f, 1.0f) * 255.0f);
-	pix.g = (Uint8)(CLAMP(p.y, 0.0f, 1.0f) * 255.0f);
-	pix.b = (Uint8)(CLAMP(p.z, 0.0f, 1.0f) * 255.0f);
+	pix.r = (Uint8)(p.x * 255.0f);
+	pix.g = (Uint8)(p.y * 255.0f);
+	pix.b = (Uint8)(p.z * 255.0f);
 	return (*((Uint32 *)(&pix)));
 }
