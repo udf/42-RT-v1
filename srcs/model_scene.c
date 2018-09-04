@@ -6,11 +6,15 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 10:06:04 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 13:34:31 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "model.h"
+
+#define READ_F_REAL1(line, var) if (!ft_tokenseek_next(&line)) return (1);
+#define READ_F_REAL2(line, var) var = (float)ft_atof(line);
+#define READ_FLOAT(line, var) READ_F_REAL1(line, var) READ_F_REAL2(line, var)
 
 int		model_obj_sphere_load(char *line, t_object *object)
 {
@@ -19,18 +23,10 @@ int		model_obj_sphere_load(char *line, t_object *object)
 	object->g.normal_at = (t_normal_at)normal_at_sphere;
 	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
 		return (1);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	object->sphere.pos.x = (float)ft_atof(line);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	object->sphere.pos.y = (float)ft_atof(line);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	object->sphere.pos.z = (float)ft_atof(line);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	object->sphere.radius = (float)ft_atof(line);
+	READ_FLOAT(line, object->sphere.pos.x)
+	READ_FLOAT(line, object->sphere.pos.y)
+	READ_FLOAT(line, object->sphere.pos.z)
+	READ_FLOAT(line, object->sphere.radius)
 	return (0);
 }
 
@@ -42,20 +38,30 @@ int		model_obj_light_load(char *line, t_object *object)
 	object->g.intersect = (t_inter_test)intersect_light;
 	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
 		return (1);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	object->light.pos.x = (float)ft_atof(line);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	object->light.pos.y = (float)ft_atof(line);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	object->light.pos.z = (float)ft_atof(line);
-	if (!ft_tokenseek_next(&line))
-		return (1);
-	if ((tmp = (float)ft_atof(line)) <= 0)
+	READ_FLOAT(line, object->light.pos.x)
+	READ_FLOAT(line, object->light.pos.y)
+	READ_FLOAT(line, object->light.pos.z)
+	READ_FLOAT(line, tmp)
+	if (tmp <= 0)
 		return (1);
 	object->g.colour = p3d_mult(object->g.colour, tmp);
+	return (0);
+}
+
+int		model_obj_plane_load(char *line, t_object *object)
+{
+	object->g.type = PLANE;
+	object->g.intersect = (t_inter_test)intersect_plane;
+	object->g.normal_at = (t_normal_at)normal_at_plane;
+	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
+		return (1);
+	READ_FLOAT(line, object->plane.pos.x)
+	READ_FLOAT(line, object->plane.pos.y)
+	READ_FLOAT(line, object->plane.pos.z)
+	READ_FLOAT(line, object->plane.norm.x)
+	READ_FLOAT(line, object->plane.norm.y)
+	READ_FLOAT(line, object->plane.norm.z)
+	object->plane.norm = p3d_norm(object->plane.norm);
 	return (0);
 }
 

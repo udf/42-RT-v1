@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:30 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 10:05:14 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 11:22:46 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,7 @@ int					model_init(const char *scene_path)
 	vec_init(&m->objects, sizeof(t_object), 0);
 	m->obj_loaders['S'] = model_obj_sphere_load;
 	m->obj_loaders['L'] = model_obj_light_load;
+	m->obj_loaders['P'] = model_obj_plane_load;
 	return (model_scene_load(scene_path, m));
 }
 

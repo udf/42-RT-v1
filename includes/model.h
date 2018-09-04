@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 10:07:08 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/04 13:34:25 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,8 @@ typedef struct		s_cylinder
 typedef struct		s_plane
 {
 	t_generic		g;
-	// TODO: actual props
+	t_p3d			norm;
+	t_p3d			pos;
 }					t_plane;
 
 typedef struct		s_light
@@ -101,10 +102,12 @@ const t_model_data	*model_get(void);
 int					model_init(const char *scene_path);
 void				model_free(void);
 
-int					intersect_sphere(t_sphere *o, t_ray ray, float *t);
 int					intersect_light(t_light *o, t_ray ray, float *t);
+int					intersect_sphere(t_sphere *o, t_ray ray, float *t);
+int					intersect_plane(t_plane *o, t_ray ray, float *t);
 
 t_p3d				normal_at_sphere(t_sphere *o, t_p3d p);
+t_p3d				normal_at_plane(t_plane *o, t_p3d p);
 
 /*
 ** Private
@@ -112,6 +115,7 @@ t_p3d				normal_at_sphere(t_sphere *o, t_p3d p);
 int					model_scene_load(const char *scene_path, t_model_data *m);
 int					model_obj_sphere_load(char *line, t_object *object);
 int					model_obj_light_load(char *line, t_object *object);
+int					model_obj_plane_load(char *line, t_object *object);
 
 /*
 ** Utility
