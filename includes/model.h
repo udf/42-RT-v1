@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/06 12:58:22 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/06 16:22:49 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,6 @@ typedef struct		s_model_data
 	t_vec			objects;
 	t_objloader		obj_loaders[256];
 }					t_model_data;
-
-# include "view.h"
 
 /*
 ** Public

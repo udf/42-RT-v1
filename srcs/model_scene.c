@@ -6,11 +6,12 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/06 13:07:19 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/06 14:55:56 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "model.h"
+#include "view.h"
 
 #define READ_F_REAL1(line, var) if (!ft_tokenseek_next(&line)) return (1);
 #define READ_F_REAL2(line, var) var = (float)ft_atof(line);
@@ -74,7 +75,6 @@ int		model_cam_load(char *line, t_object *object)
 		return (0);
 	v = view_get();
 	object->g.type = DUMMY;
-	printf("set cam %ld\n", i);
 	READ_FLOAT(line, v->cams[i].pivot.x);
 	READ_FLOAT(line, v->cams[i].pivot.y);
 	READ_FLOAT(line, v->cams[i].pivot.z);
