@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 13:34:31 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/06 13:07:19 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,10 @@ int		model_obj_sphere_load(char *line, t_object *object)
 	object->g.normal_at = (t_normal_at)normal_at_sphere;
 	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
 		return (1);
-	READ_FLOAT(line, object->sphere.pos.x)
-	READ_FLOAT(line, object->sphere.pos.y)
-	READ_FLOAT(line, object->sphere.pos.z)
-	READ_FLOAT(line, object->sphere.radius)
+	READ_FLOAT(line, object->sphere.pos.x);
+	READ_FLOAT(line, object->sphere.pos.y);
+	READ_FLOAT(line, object->sphere.pos.z);
+	READ_FLOAT(line, object->sphere.radius);
 	return (0);
 }
 
@@ -38,10 +38,10 @@ int		model_obj_light_load(char *line, t_object *object)
 	object->g.intersect = (t_inter_test)intersect_light;
 	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
 		return (1);
-	READ_FLOAT(line, object->light.pos.x)
-	READ_FLOAT(line, object->light.pos.y)
-	READ_FLOAT(line, object->light.pos.z)
-	READ_FLOAT(line, tmp)
+	READ_FLOAT(line, object->light.pos.x);
+	READ_FLOAT(line, object->light.pos.y);
+	READ_FLOAT(line, object->light.pos.z);
+	READ_FLOAT(line, tmp);
 	if (tmp <= 0)
 		return (1);
 	object->g.colour = p3d_mult(object->g.colour, tmp);
@@ -55,13 +55,36 @@ int		model_obj_plane_load(char *line, t_object *object)
 	object->g.normal_at = (t_normal_at)normal_at_plane;
 	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
 		return (1);
-	READ_FLOAT(line, object->plane.pos.x)
-	READ_FLOAT(line, object->plane.pos.y)
-	READ_FLOAT(line, object->plane.pos.z)
-	READ_FLOAT(line, object->plane.norm.x)
-	READ_FLOAT(line, object->plane.norm.y)
-	READ_FLOAT(line, object->plane.norm.z)
+	READ_FLOAT(line, object->plane.pos.x);
+	READ_FLOAT(line, object->plane.pos.y);
+	READ_FLOAT(line, object->plane.pos.z);
+	READ_FLOAT(line, object->plane.norm.x);
+	READ_FLOAT(line, object->plane.norm.y);
+	READ_FLOAT(line, object->plane.norm.z);
 	object->plane.norm = p3d_norm(object->plane.norm);
+	return (0);
+}
+
+int		model_cam_load(char *line, t_object *object)
+{
+	static size_t	i = 0;
+	t_view_data		*v;
+
+	if (i >= 10)
+		return (0);
+	v = view_get();
+	object->g.type = DUMMY;
+	printf("set cam %ld\n", i);
+	READ_FLOAT(line, v->cams[i].pivot.x);
+	READ_FLOAT(line, v->cams[i].pivot.y);
+	READ_FLOAT(line, v->cams[i].pivot.z);
+	READ_FLOAT(line, v->cams[i].rot.x);
+	READ_FLOAT(line, v->cams[i].rot.y);
+	READ_FLOAT(line, v->cams[i].rot.z);
+	READ_FLOAT(line, v->cams[i].distance);
+	if (v->cams[i].distance < 1.0f)
+		return (1);
+	i++;
 	return (0);
 }
 
@@ -84,7 +107,8 @@ int		model_scene_load(const char *scene_path, t_model_data *m)
 		free(line);
 		if (err)
 			return (SDL_SetError("Failed to read object on line %zd", line_n));
-		vec_append(&m->objects, &obj);
+		if (obj.g.type != DUMMY)
+			vec_append(&m->objects, &obj);
 		line_n++;
 	}
 	close(fd);

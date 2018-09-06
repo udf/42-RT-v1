@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:47 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/03 19:56:44 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/06 11:12:24 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,13 @@ typedef struct		s_buf
 	int				pitch;
 }					t_buf;
 
+typedef struct		s_camera
+{
+	t_p3d			pivot;
+	t_p3d			rot;
+	float			distance;
+}					t_camera;
+
 typedef struct		s_view_data
 {
 	t_buf			buf;
@@ -34,10 +41,9 @@ typedef struct		s_view_data
 	float			fov;
 	int				w;
 	int				h;
-	t_p3d			rot;
 	t_p3d			m_rot;
-	t_p3d			pivot;
-	float			distance;
+	t_camera		*cam;
+	t_camera		cams[10];
 }					t_view_data;
 
 /*

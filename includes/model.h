@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 13:34:25 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/06 12:58:22 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ typedef enum		e_object
 	CONE,
 	CYLINDER,
 	PLANE,
-	LIGHT
+	LIGHT,
+	DUMMY
 }					t_e_object;
 
 typedef struct		s_generic
@@ -95,6 +96,8 @@ typedef struct		s_model_data
 	t_objloader		obj_loaders[256];
 }					t_model_data;
 
+# include "view.h"
+
 /*
 ** Public
 */
@@ -116,6 +119,7 @@ int					model_scene_load(const char *scene_path, t_model_data *m);
 int					model_obj_sphere_load(char *line, t_object *object);
 int					model_obj_light_load(char *line, t_object *object);
 int					model_obj_plane_load(char *line, t_object *object);
+int					model_cam_load(char *line, t_object *object);
 
 /*
 ** Utility

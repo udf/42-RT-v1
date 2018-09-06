@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:34 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/08/31 00:05:18 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/06 11:13:28 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,8 +39,9 @@ int					view_init(int w, int h, float fov)
 		SDL_TEXTUREACCESS_STREAMING, w, h);
 	if (!v->buf.tex)
 		return (1);
-	v->distance = 5.0f;
-	v->pivot = (t_p3d){0, 0, 0};
+	v->cam = &v->cams[0];
+	if (v->cam->distance == 0)
+		*v->cam = (t_camera){{0, 0, 0}, {45, 0, 0}, 5};
 	return (0);
 }
 

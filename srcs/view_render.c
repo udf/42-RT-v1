@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 21:47:35 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/06 11:03:27 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,8 +108,12 @@ void		view_render(t_view_data *v, const t_model_data *m)
 	const float	scale = tan_deg(v->fov * 0.5);
 	const float	image_aspect_ratio = v->w / (float)v->h;
 
-	cam_to_w_modelview(cam_to_world, v->distance, v->pivot,
-		p3d_add(v->rot, v->m_rot));
+	printf("dist=%f, pivot=(%f %f %f), rot=(%f %f %f)\n",
+		v->cam->distance,
+		v->cam->pivot.x, v->cam->pivot.y, v->cam->pivot.z,
+		v->cam->rot.x, v->cam->rot.y, v->cam->rot.z);
+	cam_to_w_modelview(cam_to_world, v->cam->distance, v->cam->pivot,
+		p3d_add(v->cam->rot, v->m_rot));
 	view_render_bk(v);
 	ray.orig = mat_vec_mult((t_p3d){0, 0, 0}, cam_to_world);
 	iter.y = -1;
