@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/06 16:06:59 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/08 16:03:02 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,11 +40,10 @@ typedef t_p3d		(*t_normal_at)(union u_object *o, t_p3d p);
 /*
 ** Wrapper that makes all structs
 */
-# define GEN_STRUCTS1 GEN_STRUCT(sphere, GEN_SPHERE)
-# define GEN_STRUCTS2 GEN_STRUCT(plane, GEN_PLANE) GEN_STRUCT(cone, GEN_CONE)
-# define GEN_STRUCTS3 GEN_STRUCT(light, GEN_LIGHT)
-# define GEN_STRUCTS4 GEN_STRUCT(cylinder, GEN_CYLINDER)
-# define GEN_STRUCTS GEN_STRUCTS1 GEN_STRUCTS2 GEN_STRUCTS3 GEN_STRUCTS4
+# define GEN_STRUCTS1 GEN_STRUCT(sphere, SPHERE) GEN_STRUCT(plane, PLANE)
+# define GEN_STRUCTS2 GEN_STRUCT(cone, CONE) GEN_STRUCT(light, LIGHT)
+# define GEN_STRUCTS3 GEN_STRUCT(cylinder, CYLINDER)
+# define GEN_STRUCTS GEN_STRUCTS1 GEN_STRUCTS2 GEN_STRUCTS3
 
 /*
 ** Enumeration of all object types
@@ -75,7 +74,7 @@ typedef struct		s_generic
 */
 # define GEN_P3D(name) t_p3d name;
 # define GEN_FLOAT(name) float name;
-# define GEN_STRUCT(name, body) typedef struct {t_generic g; body} t_##name;
+# define GEN_STRUCT(ln, un) typedef struct {t_generic g; GEN_##un} t_##ln;
 
 /*
 ** Actually make structs
@@ -90,7 +89,7 @@ GEN_STRUCTS;
 # undef GEN_P3D
 
 # define GEN_STRUCT_STUB(t_name, name) t_name name;
-# define GEN_STRUCT(name, body) GEN_STRUCT_STUB(t_##name, name)
+# define GEN_STRUCT(name, uname) GEN_STRUCT_STUB(t_##name, name)
 # define GEN_U typedef union u_object {t_generic g; GEN_STRUCTS} t_object;
 
 GEN_U;
