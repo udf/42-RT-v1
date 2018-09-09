@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/08 16:03:02 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/09 19:14:13 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,11 @@ typedef t_p3d		(*t_normal_at)(union u_object *o, t_p3d p);
 /*
 ** Macros for generating structs
 */
-# define GEN_SPHERE GEN_P3D(pos) GEN_FLOAT(radius)
-# define GEN_PLANE GEN_P3D(norm) GEN_P3D(pos)
-# define GEN_CONE //TODO
-# define GEN_CYLINDER //TODO
-# define GEN_LIGHT GEN_P3D(pos)
+# define GEN_SPHERE GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(radius)
+# define GEN_PLANE GEN_GENERIC GEN_P3D(norm) GEN_P3D(pos)
+# define GEN_CONE GEN_GENERIC //TODO
+# define GEN_CYLINDER GEN_GENERIC //TODO
+# define GEN_LIGHT GEN_GENERIC GEN_P3D(pos)
 
 /*
 ** Wrapper that makes all structs
@@ -72,9 +72,10 @@ typedef struct		s_generic
 /*
 ** Temporarily define how to make the structures as well as their components
 */
+# define GEN_GENERIC t_generic g;
 # define GEN_P3D(name) t_p3d name;
 # define GEN_FLOAT(name) float name;
-# define GEN_STRUCT(ln, un) typedef struct {t_generic g; GEN_##un} t_##ln;
+# define GEN_STRUCT(ln, un) typedef struct {GEN_##un} t_##ln;
 
 /*
 ** Actually make structs
@@ -87,6 +88,7 @@ GEN_STRUCTS;
 # undef GEN_STRUCT
 # undef GEN_FLOAT
 # undef GEN_P3D
+# undef GEN_GENERIC
 
 # define GEN_STRUCT_STUB(t_name, name) t_name name;
 # define GEN_STRUCT(name, uname) GEN_STRUCT_STUB(t_##name, name)
