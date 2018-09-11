@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 12:34:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 10:06:03 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/10 21:27:51 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,25 @@ int			parse_rgb(char *str, t_p3d *v_colour)
 	v_colour->y = (float)colour.g / 255.0f;
 	v_colour->z = (float)colour.b / 255.0f;
 	return (0);
+}
+
+int			ft_strchr_i(const char *s, char c)
+{
+	int	i;
+
+	i = 0;
+	while (1)
+	{
+		if (s[i] == (char)c)
+			return (i);
+		if (!s[i])
+			break ;
+		i++;
+	}
+	return (-1);
+}
+
+int		ft_strncmp_max(const char *s1, const char *s2, size_t l1, size_t l2)
+{
+	return (ft_strncmp(s1, s2, MAX(l1, l2)));
 }

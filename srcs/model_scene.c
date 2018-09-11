@@ -6,110 +6,134 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/06 14:55:56 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 00:28:37 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "model.h"
 #include "view.h"
 
-#define READ_F_REAL1(line, var) if (!ft_tokenseek_next(&line)) return (1);
-#define READ_F_REAL2(line, var) var = (float)ft_atof(line);
-#define READ_FLOAT(line, var) READ_F_REAL1(line, var) READ_F_REAL2(line, var)
-
-int		model_obj_sphere_load(char *line, t_object *object)
+static int	read_generic(char **data, t_p3d *out)
 {
-	object->g.type = SPHERE;
-	object->g.intersect = (t_inter_test)intersect_sphere;
-	object->g.normal_at = (t_normal_at)normal_at_sphere;
-	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
+	if (parse_rgb(*data, out))
 		return (1);
-	READ_FLOAT(line, object->sphere.pos.x);
-	READ_FLOAT(line, object->sphere.pos.y);
-	READ_FLOAT(line, object->sphere.pos.z);
-	READ_FLOAT(line, object->sphere.radius);
+	*data += 6;
 	return (0);
 }
 
-int		model_obj_light_load(char *line, t_object *object)
+static int	read_float(char **data, float *out)
 {
-	float tmp;
+	const char *start = *data;
 
-	object->g.type = LIGHT;
-	object->g.intersect = (t_inter_test)intersect_light;
-	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
+	*data = (char *)ft_atof_seek(*data, out);
+	return (start == *data);
+}
+
+static int	read_p3d(char **data, t_p3d *out)
+{
+	if (read_float(data, &out->x) || ft_tokenseek(data) == 0 || **data != ',')
 		return (1);
-	READ_FLOAT(line, object->light.pos.x);
-	READ_FLOAT(line, object->light.pos.y);
-	READ_FLOAT(line, object->light.pos.z);
-	READ_FLOAT(line, tmp);
-	if (tmp <= 0)
+	*data += 1;
+	if (read_float(data, &out->y) || ft_tokenseek(data) == 0 || **data != ',')
 		return (1);
-	object->g.colour = p3d_mult(object->g.colour, tmp);
+	*data += 1;
+	if (read_float(data, &out->z))
+		return (1);
 	return (0);
 }
 
-int		model_obj_plane_load(char *line, t_object *object)
-{
-	object->g.type = PLANE;
-	object->g.intersect = (t_inter_test)intersect_plane;
-	object->g.normal_at = (t_normal_at)normal_at_plane;
-	if (!ft_tokenseek_next(&line) || parse_rgb(line, &object->g.colour))
-		return (1);
-	READ_FLOAT(line, object->plane.pos.x);
-	READ_FLOAT(line, object->plane.pos.y);
-	READ_FLOAT(line, object->plane.pos.z);
-	READ_FLOAT(line, object->plane.norm.x);
-	READ_FLOAT(line, object->plane.norm.y);
-	READ_FLOAT(line, object->plane.norm.z);
-	object->plane.norm = p3d_norm(object->plane.norm);
-	return (0);
-}
+#define TYPE_WR_1(var) if(!ft_strncmp_max(param,#var,len,ft_strlen(#var)))
+#define TYPE_WR_2(type, var) if(read_##type(&data,&o->var))return 1;continue;
+#define TYPE_WRAPPER(type, s_var, var) TYPE_WR_1(s_var) {TYPE_WR_2(type, var)}
 
-int		model_cam_load(char *line, t_object *object)
+#define GEN_GENERIC TYPE_WRAPPER(generic, colour, g.colour)
+#define GEN_P3D(name) TYPE_WRAPPER(p3d, name, name)
+#define GEN_FLOAT(name) TYPE_WRAPPER(float, name, name)
+
+#define GEN_S1(ln) int load_##ln(char *data, t_object *obj) {
+#define GEN_S2(un, ln) int len;char *param;obj->g.type=un;t_##ln *o=&obj->ln;
+#define GEN_S3 while (ft_tokenseek(&data)) {
+#define GEN_S4 if ((len = ft_strchr_i(data, '=')) < 0) break;
+#define GEN_S5(un) param = data; data += len + 1;GEN_##un;
+#define GEN_S6(ln) return SDL_SetError("Can't find \"%.*s\" of "#ln,len,param);
+#define GEN_S7(ln) } return verify_##ln(o);}
+#define GEN_S_P1(ln, un) GEN_S1(ln) GEN_S2(un, ln)
+#define GEN_S_P2(ln, un) GEN_S3 GEN_S4 GEN_S5(un) GEN_S6(ln) GEN_S7(ln)
+#define GEN_STRUCT(ln, un) GEN_S_P1(ln, un) GEN_S_P2(ln, un)
+
+GEN_STRUCTS;
+GEN_STRUCT(camera, CAMERA);
+
+#undef GEN_STRUCT
+#undef GEN_S_P2
+#undef GEN_S_P1
+#undef GEN_S7
+#undef GEN_S6
+#undef GEN_S5
+#undef GEN_S4
+#undef GEN_S3
+#undef GEN_S2
+#undef GEN_S1
+#undef GEN_FLOAT
+#undef GEN_P3D
+#undef GEN_GENERIC
+#undef TYPE_WRAPPER
+#undef TYPE_WR_2
+#undef TYPE_WR_1
+
+#define GEN_STRUCT_STUB(t_name, name) t_name name;
+#define GEN_S1(name_str) if (ft_strncmp(line, name_str, len) == 0)
+#define GEN_S2(load_func) return load_func(data, o);
+#define GEN_STRUCT(ln, un) GEN_S1(#ln) GEN_S2(load_##ln)
+
+static int	parse_line(char *line, t_object *o)
 {
-	static size_t	i = 0;
+	static size_t	cam_i = 0;
+	size_t			len;
+	char			*data;
 	t_view_data		*v;
 
-	if (i >= 10)
+	len = ft_tokenseek(&line);
+	data = line + len;
+	ft_tokenseek(&data);
+	GEN_STRUCTS;
+	if (ft_strncmp(line, "camera", len) == 0)
+	{
+		if (cam_i >= 10)
+			return (SDL_SetError("Too many cameras"));
+		if (load_camera(data, o))
+			return (1);
+		v = view_get();
+		v->cams[cam_i++] = o->camera;
 		return (0);
-	v = view_get();
-	object->g.type = DUMMY;
-	READ_FLOAT(line, v->cams[i].pivot.x);
-	READ_FLOAT(line, v->cams[i].pivot.y);
-	READ_FLOAT(line, v->cams[i].pivot.z);
-	READ_FLOAT(line, v->cams[i].rot.x);
-	READ_FLOAT(line, v->cams[i].rot.y);
-	READ_FLOAT(line, v->cams[i].rot.z);
-	READ_FLOAT(line, v->cams[i].distance);
-	if (v->cams[i].distance < 1.0f)
-		return (1);
-	i++;
-	return (0);
+	}
+	return (SDL_SetError("Unknown object \"%.*s\"", (int)len, line));
 }
 
-int		model_scene_load(const char *scene_path, t_model_data *m)
+#undef GEN_STRUCT
+#undef GEN_S2
+#undef GEN_S1
+#undef GEN_STRUCT_STUB
+
+int			model_scene_load(const char *scene_path, t_model_data *m)
 {
 	int				fd;
 	unsigned char	*line;
-	ssize_t			line_n;
+	ssize_t			l_n;
 	int				err;
 	t_object		obj;
 
 	if ((fd = open(scene_path, O_RDONLY)) < 0)
 		return (SDL_SetError("Could not open scene file"));
-	line_n = 0;
-	while (get_next_line(fd, (char **)&line) == GNL_SUCCESS)
+	l_n = 0;
+	while (get_next_line(fd, (char **)&line) == GNL_SUCCESS && ++l_n)
 	{
-		err = 1;
-		if (m->obj_loaders[line[0]])
-			err = (m->obj_loaders[line[0]])((char*)line, &obj);
+		err = parse_line(ft_strlower((char*)line), &obj);
 		free(line);
 		if (err)
-			return (SDL_SetError("Failed to read object on line %zd", line_n));
-		if (obj.g.type != DUMMY)
+			return (SDL_SetError("Error on line %zd: %s", l_n, SDL_GetError()));
+		if (obj.g.type != CAMERA)
 			vec_append(&m->objects, &obj);
-		line_n++;
 	}
 	close(fd);
 	if (m->objects.length == 0)
