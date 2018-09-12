@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 10:08:28 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 15:48:11 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ static int	parse_line(char *line, t_object *o)
 	return (SDL_SetError("Unknown object \"%.*s\"", (int)len, line));
 }
 
+#undef GEN_STRUCTS_INDIRECTION
 #undef GEN_STRUCT
 #undef GEN_S2
 #undef GEN_S1
