@@ -6,7 +6,7 @@
 #    By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/01/25 07:39:20 by mhoosen           #+#    #+#              #
-#    Updated: 2018/09/10 21:23:17 by mhoosen          ###   ########.fr        #
+#    Updated: 2018/09/12 10:28:34 by mhoosen          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,12 +24,15 @@ INCLUDES=-I libft/includes -I lib3d/includes -I ./includes
 LIBS=-L libft/ -L lib3d/ -lft -l3d -lm
 SDL2_CONFIG=SDL2/bin/sdl2-config
 SDL_SRCS=SDL2-2.0.8
+SDL_TARBALL=$(SDL_SRCS).tar.gz
 
 all: $(NAME)
 
-$(SDL_SRCS):
-	curl -L https://www.libsdl.org/release/SDL2-2.0.8.tar.gz -o SDL2-2.0.8.tar.gz
-	tar -xvzf $(SDL_SRCS).tar.gz
+$(SDL_TARBALL):
+	curl -L https://www.libsdl.org/release/SDL2-2.0.8.tar.gz -o $(SDL_TARBALL)
+
+$(SDL_SRCS): $(SDL_TARBALL)
+	tar -xvzf $(SDL_TARBALL)
 
 $(SDL2_CONFIG): $(SDL_SRCS)
 	cd $(SDL_SRCS);\
