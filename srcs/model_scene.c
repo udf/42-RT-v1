@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 10:03:11 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 00:28:37 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 10:08:28 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,10 +60,12 @@ static int	read_p3d(char **data, t_p3d *out)
 #define GEN_S_P1(ln, un) GEN_S1(ln) GEN_S2(un, ln)
 #define GEN_S_P2(ln, un) GEN_S3 GEN_S4 GEN_S5(un) GEN_S6(ln) GEN_S7(ln)
 #define GEN_STRUCT(ln, un) GEN_S_P1(ln, un) GEN_S_P2(ln, un)
+#define ACTUALLY_GEN_CAMERA GEN_STRUCT(camera, CAMERA)
 
 GEN_STRUCTS;
-GEN_STRUCT(camera, CAMERA);
+ACTUALLY_GEN_CAMERA;
 
+#undef ACTUALLY_GEN_CAMERA
 #undef GEN_STRUCT
 #undef GEN_S_P2
 #undef GEN_S_P1
@@ -85,6 +87,7 @@ GEN_STRUCT(camera, CAMERA);
 #define GEN_S1(name_str) if (ft_strncmp(line, name_str, len) == 0)
 #define GEN_S2(load_func) return load_func(data, o);
 #define GEN_STRUCT(ln, un) GEN_S1(#ln) GEN_S2(load_##ln)
+#define GEN_STRUCTS_INDIRECTION GEN_STRUCTS
 
 static int	parse_line(char *line, t_object *o)
 {
@@ -96,7 +99,7 @@ static int	parse_line(char *line, t_object *o)
 	len = ft_tokenseek(&line);
 	data = line + len;
 	ft_tokenseek(&data);
-	GEN_STRUCTS;
+	GEN_STRUCTS_INDIRECTION;
 	if (ft_strncmp(line, "camera", len) == 0)
 	{
 		if (cam_i >= 10)

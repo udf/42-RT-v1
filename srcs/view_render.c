@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 00:18:29 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 10:24:18 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,6 @@ Uint32		cast_ray(t_ray ray, const t_vec *objects, t_ray sh_ray, size_t i)
 	out_colour = (t_p3d){0.16, 0.16, 0.16};
 	if (!test_intersection(ray, objects, &t, &hit_obj))
 		return (p3d_to_colour(out_colour));
-	i = 0;
 	out_colour = p3d_elem_mult(hit_obj->g.colour, out_colour);
 	hit.orig = p3d_add(ray.orig, p3d_mult(ray.dir, t - 0.001));
 	hit.dir = hit_obj->g.normal_at(hit_obj, hit.orig);

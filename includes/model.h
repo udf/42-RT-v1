@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 00:14:14 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 09:58:58 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,17 +81,19 @@ typedef struct		s_generic
 ** Make sure that camera has a generic attribute (so its g.type can be checked)
 */
 # define GEN_CAMERA GEN_GENERIC GEN_P3D(pivot) GEN_P3D(rot) GEN_FLOAT(distance)
+# define ACTUALLY_GEN_CAMERA GEN_STRUCT(camera, CAMERA)
 
 /*
 ** Actually make structs
 */
 GEN_STRUCTS;
-GEN_STRUCT(camera, CAMERA);
+ACTUALLY_GEN_CAMERA;
 
 /*
 ** Remove the generic attribute from camera, because we don't need to load a
 ** colour from the generated structure loading code (see model_scene.c)
 */
+# undef ACTUALLY_GEN_CAMERA
 # undef GEN_CAMERA
 # define GEN_CAMERA GEN_P3D(pivot) GEN_P3D(rot) GEN_FLOAT(distance)
 
@@ -155,6 +157,5 @@ int					parse_rgb(char *str, t_p3d *v_colour);
 int					ft_strchr_i(const char *s, char c);
 int					ft_strncmp_max(const char *s1, const char *s2,
 														size_t l1, size_t l2);
-
 
 #endif

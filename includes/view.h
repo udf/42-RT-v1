@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:47 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/11 23:08:49 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 10:24:16 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,5 @@ int					iroundf(float v);
 Uint32				*buf_pixel(t_buf *buf, int x, int y);
 Uint32				p3d_to_colour(t_p3d p);
 int					verify_camera(t_camera *o);
-
 
 #endif

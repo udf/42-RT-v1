@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 20:59:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/11 23:32:03 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 10:22:51 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,7 @@ int		intersect_plane(t_plane *o, t_ray ray, float *t)
 	denom = p3d_dot(o->norm, ray.dir);
 	if (fabsf(denom) <= 0.0001f)
 		return (0);
-	t_p3d p0l0 = p3d_sub(o->pos, ray.orig);
-	*t = p3d_dot(p0l0, o->norm) / denom;
+	*t = p3d_dot(p3d_sub(o->pos, ray.orig), o->norm) / denom;
 	if (*t < 0)
 		return (0);
 	return (1);
@@ -73,4 +72,3 @@ int		intersect_cylinder(t_cylinder *o, t_ray ray, float *t)
 	(void)t;
 	return (0);
 }
-

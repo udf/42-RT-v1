@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 21:20:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/11 23:45:02 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 10:22:13 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,3 @@ int	verify_cylinder(t_cylinder *o)
 	o->g.normal_at = (t_normal_at)normal_at_cylinder;
 	return (0);
 }
-

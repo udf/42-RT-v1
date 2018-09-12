@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 12:34:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/10 21:27:51 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/12 10:24:17 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ int			ft_strchr_i(const char *s, char c)
 	return (-1);
 }
 
-int		ft_strncmp_max(const char *s1, const char *s2, size_t l1, size_t l2)
+int			ft_strncmp_max(const char *s1, const char *s2, size_t l1, size_t l2)
 {
 	return (ft_strncmp(s1, s2, MAX(l1, l2)));
 }
