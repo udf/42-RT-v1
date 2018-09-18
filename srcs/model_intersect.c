@@ -49,7 +49,7 @@ int		intersect_plane(t_plane *o, t_ray ray, float *t)
 	float denom;
 
 	denom = p3d_dot(o->norm, ray.dir);
-	if (fabsf(denom) <= 0.0001f)
+	if (fabsf(denom) <= EPSILON)
 		return (0);
 	*t = p3d_dot(p3d_sub(o->pos, ray.orig), o->norm) / denom;
 	if (*t < 0)
