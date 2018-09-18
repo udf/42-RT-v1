@@ -6,11 +6,13 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 20:59:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 10:22:51 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 12:01:13 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "model.h"
+
+#define EPSILON 0.000001f
 
 int		intersect_sphere(t_sphere *o, t_ray ray, float *t)
 {
@@ -66,9 +68,21 @@ int		intersect_cone(t_cone *o, t_ray ray, float *t)
 
 int		intersect_cylinder(t_cylinder *o, t_ray ray, float *t)
 {
-	// TODO implement this
-	(void)o;
-	(void)ray;
-	(void)t;
-	return (0);
+	ray.orig = p3d_sub(ray.orig, o->pos);
+	float a = ray.dir.x * ray.dir.x + ray.dir.y * ray.dir.y;
+	float b = ray.dir.x * ray.orig.x + ray.dir.y * ray.orig.y;
+	float c = ray.orig.x * ray.orig.x + ray.orig.y * ray.orig.y - o->rad * o->rad;
+
+	float delta = b * b - a * c;
+
+	if (delta < EPSILON)
+		return (0);
+
+	*t = (-b - sqrt(delta)) / a;
+
+	if (*t <= EPSILON)
+		return (0);
+	return (1);
 }
+
+#undef EPSILON

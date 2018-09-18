@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 09:58:58 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 11:30:22 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,14 @@ typedef t_p3d		(*t_normal_at)(union u_tmp *o, t_p3d p);
 /*
 ** Macros for generating structs
 */
+# define NO_LOAD(x) x
 # define GEN_SPHERE GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(radius)
 # define GEN_PLANE GEN_GENERIC GEN_P3D(norm) GEN_P3D(pos)
 # define GEN_CONE GEN_GENERIC //TODO
-# define GEN_CYLINDER GEN_GENERIC //TODO
+# define GEN_CYLINDER GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(rad)
 # define GEN_LIGHT GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(intensity)
+# define GEN_CAMERA_1 NO_LOAD(GEN_GENERIC) GEN_P3D(pivot) GEN_P3D(rot)
+# define GEN_CAMERA GEN_CAMERA_1 GEN_FLOAT(distance)
 
 /*
 ** Wrapper that makes all structs
@@ -79,9 +82,9 @@ typedef struct		s_generic
 # define GEN_STRUCT(ln, un) typedef struct {GEN_##un} t_##ln;
 
 /*
-** Make sure that camera has a generic attribute (so its g.type can be checked)
+** Use an indirection macro to generate the camera structure because
+** Norminette assumes that the parameters are variables
 */
-# define GEN_CAMERA GEN_GENERIC GEN_P3D(pivot) GEN_P3D(rot) GEN_FLOAT(distance)
 # define ACTUALLY_GEN_CAMERA GEN_STRUCT(camera, CAMERA)
 
 /*
@@ -91,12 +94,11 @@ GEN_STRUCTS;
 ACTUALLY_GEN_CAMERA;
 
 /*
-** Remove the generic attribute from camera, because we don't need to load a
-** colour from the generated structure loading code (see model_scene.c)
+** Remove the NO_LOAD macro so that model_scene.c doesn't generate code to
+** load those attributes
 */
-# undef ACTUALLY_GEN_CAMERA
-# undef GEN_CAMERA
-# define GEN_CAMERA GEN_P3D(pivot) GEN_P3D(rot) GEN_FLOAT(distance)
+# undef NO_LOAD
+# define NO_LOAD(x)
 
 /*
 ** Undefine the temporary macros
