@@ -55,7 +55,8 @@ typedef enum		e_object
 	CYLINDER,
 	PLANE,
 	LIGHT,
-	CAMERA
+	CAMERA,
+	DUMMY
 }					t_e_object;
 
 /*

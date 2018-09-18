@@ -99,6 +99,7 @@ static int	parse_line(char *line, t_object *o)
 	len = ft_tokenseek(&line);
 	data = line + len;
 	ft_tokenseek(&data);
+	o->g.type = DUMMY;
 	GEN_STRUCTS_INDIRECTION;
 	if (ft_strncmp(line, "camera", len) == 0)
 	{
@@ -110,6 +111,8 @@ static int	parse_line(char *line, t_object *o)
 		v->cams[cam_i++] = o->camera;
 		return (0);
 	}
+	if (line[0] == '#')
+		return (0);
 	return (SDL_SetError("Unknown object \"%.*s\"", (int)len, line));
 }
 
@@ -136,7 +139,7 @@ int			model_scene_load(const char *scene_path, t_model_data *m)
 		free(line);
 		if (err)
 			return (SDL_SetError("Error on line %zd: %s", l_n, SDL_GetError()));
-		if (obj.g.type != CAMERA)
+		if (obj.g.type != CAMERA && obj.g.type != DUMMY)
 			vec_append(&m->objects, &obj);
 	}
 	close(fd);
