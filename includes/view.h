@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:47 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 10:24:16 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 16:21:56 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,12 @@
 # include "SDL.h"
 # include "util.h"
 # include "model.h"
+
+typedef struct		s_float_pair
+{
+	float			a;
+	float			b;
+}					t_float_pair;
 
 typedef struct		s_buf
 {

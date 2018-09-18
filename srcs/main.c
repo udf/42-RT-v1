@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:27 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/04 10:11:51 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 16:03:12 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ static void	loop(void)
 	{
 		if (controller_process_events(0.3f))
 			break ;
-		//model_update(elapsed_ticks, elapsed_secs);
 		view_update();
 	}
 }

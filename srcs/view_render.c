@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/18 14:20:32 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 17:06:06 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,29 +72,26 @@ int			test_intersection(t_ray ray, const t_vec *objects,
 
 Uint32		cast_ray(t_ray ray, const t_vec *objects, t_ray sh_ray, size_t i)
 {
-	t_p3d		out_colour;
-	float		t;
-	float		t_light;
-	t_object	*hit_obj;
-	t_ray		hit;
-	t_object	*l_obj;
+	t_p3d			out_colour;
+	t_float_pair	t;
+	t_object		*hit_obj;
+	t_ray			hit;
+	t_object		*l_obj;
 
 	out_colour = (t_p3d){0.16, 0.16, 0.16};
-	if (!test_intersection(ray, objects, &t, &hit_obj))
+	if (!test_intersection(ray, objects, &t.a, &hit_obj))
 		return (p3d_to_colour(out_colour));
 	out_colour = p3d_elem_mult(hit_obj->g.colour, out_colour);
-	hit.orig = p3d_add(ray.orig, p3d_mult(ray.dir, t - 0.001));
+	hit.orig = p3d_add(ray.orig, p3d_mult(ray.dir, t.a - 0.001));
 	hit.dir = hit_obj->g.normal_at(hit_obj, hit.orig);
 	sh_ray.orig = hit.orig;
-	while (i < objects->length)
+	while ((l_obj = vec_get((t_vec *)objects, i++)))
 	{
-		l_obj = vec_get((t_vec *)objects, i++);
 		if (l_obj->g.type != LIGHT)
 			continue ;
 		sh_ray.dir = p3d_sub(l_obj->light.pos, hit.orig);
-		t_light = p3d_mag(sh_ray.dir);
-		sh_ray.dir = p3d_norm(sh_ray.dir);
-		if (test_intersection(sh_ray, objects, &t, NULL) && t <= t_light)
+		t.b = p3d_mag_norm(&sh_ray.dir);
+		if (test_intersection(sh_ray, objects, &t.a, NULL) && t.a <= t.b)
 			continue ;
 		out_colour = p3d_add(out_colour, p3d_elem_mult(hit_obj->g.colour,
 			p3d_mult(l_obj->g.colour, fabsf(p3d_dot(hit.dir, sh_ray.dir)))));
@@ -110,10 +107,6 @@ void		view_render(t_view_data *v, const t_model_data *m)
 	const float	scale = tan_deg(v->fov * 0.5);
 	const float	image_aspect_ratio = v->w / (float)v->h;
 
-	printf("dist=%f, pivot=(%f %f %f), rot=(%f %f %f)\n",
-		v->cam->distance,
-		v->cam->pivot.x, v->cam->pivot.y, v->cam->pivot.z,
-		v->cam->rot.x, v->cam->rot.y, v->cam->rot.z);
 	cam_to_w_modelview(cam_to_world, v->cam->distance, v->cam->pivot,
 		p3d_add(v->cam->rot, v->m_rot));
 	view_render_bk(v);
@@ -133,5 +126,4 @@ void		view_render(t_view_data *v, const t_model_data *m)
 				cast_ray(ray, &m->objects, ray, 0);
 		}
 	}
-	//exit(1);
 }
