@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 14:56:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/18 11:30:22 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 14:38:41 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,8 @@ typedef t_p3d		(*t_normal_at)(union u_tmp *o, t_p3d p);
 # define NO_LOAD(x) x
 # define GEN_SPHERE GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(radius)
 # define GEN_PLANE GEN_GENERIC GEN_P3D(norm) GEN_P3D(pos)
-# define GEN_CONE GEN_GENERIC //TODO
+# define GEN_CONE_1 GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(h) GEN_FLOAT(rad)
+# define GEN_CONE GEN_CONE_1 NO_LOAD(GEN_FLOAT(cosa2)) NO_LOAD(GEN_FLOAT(sina2))
 # define GEN_CYLINDER GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(rad)
 # define GEN_LIGHT GEN_GENERIC GEN_P3D(pos) GEN_FLOAT(intensity)
 # define GEN_CAMERA_1 NO_LOAD(GEN_GENERIC) GEN_P3D(pivot) GEN_P3D(rot)

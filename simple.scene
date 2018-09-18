@@ -1,6 +1,8 @@
 Camera distance=7.5 pivot=0,0,2 rot=90,0,0
 camera pivot=0,0,0 rot=0,0,0 distance=10
 Light colour=FFEEEE pos=3,0,3 intensity=1
-Cylinder colour=00FF00 pos=0,0,0 rad=1
+Cylinder colour=88FF00 pos=0,0,0 rad=1
 Plane colour=FFFFFF pos=0,0,0 norm=0,0,1
+Cone colour=FF5599 pos=6,3,0.5 h=5 rad=3
 Plane colour=FFFFFF pos=0,0,10 norm=0,0,1
+Sphere colour=AAFFBB pos=0,0,3 radius=2

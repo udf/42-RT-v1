@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/30 20:59:35 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/18 12:01:13 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 15:01:20 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,11 +59,34 @@ int		intersect_plane(t_plane *o, t_ray ray, float *t)
 
 int		intersect_cone(t_cone *o, t_ray ray, float *t)
 {
-	// TODO implement this
-	(void)o;
-	(void)ray;
-	(void)t;
-	return (0);
+	ray.orig = p3d_sub(ray.orig, o->pos);
+
+	double a = o->cosa2 * ray.dir.x * ray.dir.x
+				+ o->cosa2 * ray.dir.y * ray.dir.y
+				- o->sina2 * ray.dir.z * ray.dir.z;
+	double b = o->cosa2 * ray.dir.x * ray.orig.x
+				+ o->cosa2 * ray.dir.y * ray.orig.y
+				- o->sina2 * ray.dir.z * ray.orig.z;
+	double c = o->cosa2 * ray.orig.x * ray.orig.x
+				+ o->cosa2 * ray.orig.y * ray.orig.y
+				- o->sina2 * ray.orig.z * ray.orig.z;
+
+	double delta = b * b - a * c;
+
+	if (delta < EPSILON)
+		return (0);
+
+	*t = (-b - sqrt(delta)) / a;
+
+	if (*t < EPSILON)
+		return (0);
+
+	double z = ray.orig.z + *t * ray.dir.z;
+
+	if (z < -o->h - EPSILON || z > EPSILON)
+		return (0);
+
+	return (1);
 }
 
 int		intersect_cylinder(t_cylinder *o, t_ray ray, float *t)

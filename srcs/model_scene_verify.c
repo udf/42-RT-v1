@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/09/10 21:20:43 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 10:22:13 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 15:11:48 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,16 @@ int	verify_plane(t_plane *o)
 
 int	verify_cone(t_cone *o)
 {
+	double	d;
+
 	o->g.intersect = (t_inter_test)intersect_cone;
 	o->g.normal_at = (t_normal_at)normal_at_cone;
+	o->pos.z += o->h;
+	d = p3d_mag(p3d_sub(
+		(t_p3d){o->pos.x, o->pos.y, o->pos.z + o->h},
+		(t_p3d){o->pos.x + o->rad, o->pos.y, o->pos.z}));
+	o->cosa2 = o->h / d;
+	o->sina2 = o->rad / d;
 	return (0);
 }
 
