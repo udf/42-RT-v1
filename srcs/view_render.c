@@ -6,7 +6,7 @@
 /*   By: mhoosen <mhoosen@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/08/29 17:42:24 by mhoosen           #+#    #+#             */
-/*   Updated: 2018/09/12 10:24:18 by mhoosen          ###   ########.fr       */
+/*   Updated: 2018/09/18 14:20:32 by mhoosen          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,7 @@ Uint32		cast_ray(t_ray ray, const t_vec *objects, t_ray sh_ray, size_t i)
 {
 	t_p3d		out_colour;
 	float		t;
+	float		t_light;
 	t_object	*hit_obj;
 	t_ray		hit;
 	t_object	*l_obj;
@@ -90,8 +91,10 @@ Uint32		cast_ray(t_ray ray, const t_vec *objects, t_ray sh_ray, size_t i)
 		l_obj = vec_get((t_vec *)objects, i++);
 		if (l_obj->g.type != LIGHT)
 			continue ;
-		sh_ray.dir = p3d_norm(p3d_sub(l_obj->light.pos, hit.orig));
-		if (test_intersection(sh_ray, objects, NULL, NULL))
+		sh_ray.dir = p3d_sub(l_obj->light.pos, hit.orig);
+		t_light = p3d_mag(sh_ray.dir);
+		sh_ray.dir = p3d_norm(sh_ray.dir);
+		if (test_intersection(sh_ray, objects, &t, NULL) && t <= t_light)
 			continue ;
 		out_colour = p3d_add(out_colour, p3d_elem_mult(hit_obj->g.colour,
 			p3d_mult(l_obj->g.colour, fabsf(p3d_dot(hit.dir, sh_ray.dir)))));
